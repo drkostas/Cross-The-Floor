@@ -1,0 +1,14 @@
+source:
+  config:
+    sources:
+      - link: https://en.wikipedia.org/wiki/List_of_members_of_the_Hellenic_Parliament,_2015_(February%E2%80%93August)
+        table_identifier: wikitable sortable jquery-tablesorter
+        dom_type: class
+      - link: https://en.wikipedia.org/wiki/List_of_members_of_the_Hellenic_Parliament,_2019
+        table_identifier: wikitable sortable jquery-tablesorter
+        dom_type: class
+  type: ParliamentMembersCrawler
+target:
+  config:
+    target_path: ../plots
+  type: plotly
