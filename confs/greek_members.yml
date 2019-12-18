@@ -2,11 +2,15 @@ source:
   config:
     sources:
       - link: https://en.wikipedia.org/wiki/List_of_members_of_the_Hellenic_Parliament,_2015_(February%E2%80%93August)
-        table_identifier: wikitable sortable jquery-tablesorter
-        dom_type: class
+        table_header: <tr><th>Name</th><th>Constituency</th><th colspan="2">Parliamentary Group</th><th>Comments</th></tr>
+        ignore_cols:
+          - Parliamentary Group
+        enclosing_tag: tbody
       - link: https://en.wikipedia.org/wiki/List_of_members_of_the_Hellenic_Parliament,_2019
-        table_identifier: wikitable sortable jquery-tablesorter
-        dom_type: class
+        table_header: <tr><th>Name</th><th>Constituency</th><th colspan="2">Parliamentary Group</th><th>Comments</th></tr>
+        ignore_cols:
+          - Parliamentary Group
+        enclosing_tag: tbody
   type: ParliamentMembersCrawler
 target:
   config:

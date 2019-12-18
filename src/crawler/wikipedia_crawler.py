@@ -13,6 +13,19 @@ class WikipediaCrawler(AbstractCrawler):
         """
         super().__init__(config=config)
 
+
     @abstractmethod
-    def crawl(self) -> None:
+    def __retrieve_html__(self, **kwargs):
+        pass
+
+    @abstractmethod
+    def __parse_html__(self, **kwargs):
+        pass
+
+    @abstractmethod
+    def get_table(self, **kwargs):
+        pass
+
+    @abstractmethod
+    def get_tables(self, **kwargs):
         pass

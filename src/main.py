@@ -77,7 +77,9 @@ def main():
     log_fn = args.log_file
     __setup_log__(log_fn, args.debug)
     crawler, visualizer = __setup_classes__(args)
-
+    source = crawler.__config__['sources'][0]
+    for table in crawler:
+        print(table)
 
 if __name__ == '__main__':
     try:
