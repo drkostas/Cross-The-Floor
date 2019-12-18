@@ -29,3 +29,4 @@ class WikipediaCrawler(AbstractCrawler):
     @abstractmethod
     def get_tables(self, **kwargs):
         pass
+

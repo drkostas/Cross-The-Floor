@@ -29,3 +29,6 @@ class AbstractCrawler(ABC):
     @abstractmethod
     def get_tables(self, **kwargs):
         pass
+
+    def __iter__(self):
+        return self.get_tables()

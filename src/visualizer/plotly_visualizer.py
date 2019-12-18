@@ -1,5 +1,6 @@
 from typing import *
 import logging
+import pandas as pd
 
 from .visualizer import AbstractVisualizer
 
@@ -13,5 +14,5 @@ class PlotlyVisualizer(AbstractVisualizer):
         """
         super().__init__(config=config)
 
-    def create_sankey_diagram(self):
+    def create_sankey_diagram(self, data_df: pd.DataFrame):
         pass
