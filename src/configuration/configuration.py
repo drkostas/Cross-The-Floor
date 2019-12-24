@@ -45,6 +45,9 @@ class Configuration:
     def get_target_type(self) -> Dict:
         return self.target['type']
 
+    def get_plot_name(self) -> str:
+        return self.target['config']['plot_name']
+
     def to_yml(self, fn) -> None:
         """
         Writes the configuration to a stream. For example a file.

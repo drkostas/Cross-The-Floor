@@ -43,9 +43,10 @@ class ParliamentMembersCrawler(WikipediaCrawler):
     def get_table(self, source: dict) -> pd.DataFrame:
         table = self.__parse_html__(source)
         df_table = pd.read_html(table)[0]
-        df_table.drop(source["ignore_cols"], axis=1)
+        if "ignore_cols" in source:
+            df_table.drop(source["ignore_cols"], axis=1)
         return df_table
 
-    def get_tables(self) -> Iterator[pd.DataFrame]:
+    def get_tables(self) -> Iterator[Tuple[pd.DataFrame, str, dict]]:
         for source in self.__config__['sources']:
-            yield self.get_table(source)
+            yield self.get_table(source), source['name_col'], source['attr_col']

@@ -5,12 +5,20 @@ from logging import StreamHandler
 import argparse
 import traceback
 from typing import *
+import pandas as pd
+import numpy as np
+import re
+
+pd.set_option('display.max_columns', None)
+pd.set_option('display.max_rows', 20)
+pd.set_option('display.width', 1000)
 
 from configuration.configuration import Configuration
 from crawler.crawler import AbstractCrawler
 from visualizer.visualizer import AbstractVisualizer
 from crawler.parliament_members_crawler import ParliamentMembersCrawler
 from visualizer.plotly_visualizer import PlotlyVisualizer
+from pandas_manager.pandas_manager import PandasManager
 
 logger = logging.getLogger('MAIN')
 
@@ -55,10 +63,11 @@ def __bootstrap__() -> argparse.Namespace:
     optional = parser.add_argument_group('Optional Arguments')
     optional.add_argument("-h", "--help", action="help", help="show this help message and exit")
     optional.add_argument('-d', '--debug', action='store_true', help='enables the debug log messages')
+    optional.add_argument('-p', '--plot-name', help="The name of the Sankey Diagram plot")
     return parser.parse_args()
 
 
-def __setup_classes__(args: argparse.Namespace) -> Tuple[AbstractCrawler, AbstractVisualizer]:
+def __setup_classes__(args: argparse.Namespace) -> Tuple[AbstractCrawler, AbstractVisualizer, str]:
     config = Configuration(args.config_file)
     if config.get_source_type() == 'ParliamentMembersCrawler':
         crawler = ParliamentMembersCrawler(config=config.get_source())
@@ -69,16 +78,28 @@ def __setup_classes__(args: argparse.Namespace) -> Tuple[AbstractCrawler, Abstra
     else:
         raise Exception('Unknown source type!')
 
-    return crawler, visualizer
+    return crawler, visualizer, config.get_plot_name()
 
 
 def main():
     args = __bootstrap__()
     log_fn = args.log_file
     __setup_log__(log_fn, args.debug)
-    crawler, visualizer = __setup_classes__(args)
-    for table in crawler:
-        print(table)
+    crawler, visualizer, plot_name = __setup_classes__(args)
+
+    df_generator = crawler.get_tables()
+    pandas_manager = PandasManager(df_generator=df_generator)
+    merged_df, plot_cols, name_col = pandas_manager.df_from_generator()
+    nodes_df = pandas_manager.create_nodes_df(merged_df, plot_cols)
+    edges_df = pandas_manager.create_edges_df(merged_df, plot_cols, name_col)
+
+    print(nodes_df)
+    print(edges_df)
+
+    # visualizer.create_sankey_diagram(data_df=merged_df,
+    #                                  attribute_cols=plot_cols,
+    #                                  name_col=name_col,
+    #                                  plot_name=plot_name)
 
 
 if __name__ == '__main__':

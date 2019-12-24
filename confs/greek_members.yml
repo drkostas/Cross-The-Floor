@@ -1,13 +1,30 @@
 source:
   config:
     sources:
+      - link: https://en.wikipedia.org/wiki/List_of_members_of_the_Hellenic_Parliament,_2007%E2%80%9309
+        table_header: <tr><th>Full Name</th><th>Constituency</th><th>Parliamentary Group</th></tr>
+        name_col: Full Name
+        attr_col:
+          origin_name: Parliamentary Group
+          name_on_plot: Kommata 2007
+#        ignore_cols:
+#          - Parliamentary Group
+        enclosing_tag: tbody
       - link: https://en.wikipedia.org/wiki/List_of_members_of_the_Hellenic_Parliament,_2015_(February%E2%80%93August)
         table_header: <tr><th>Name</th><th>Constituency</th><th colspan="2">Parliamentary Group</th><th>Comments</th></tr>
+        name_col: Name
+        attr_col:
+          origin_name: Parliamentary Group.1
+          name_on_plot: Kommata 2015
         ignore_cols:
           - Parliamentary Group
         enclosing_tag: tbody
       - link: https://en.wikipedia.org/wiki/List_of_members_of_the_Hellenic_Parliament,_2019
         table_header: <tr><th>Name</th><th>Constituency</th><th colspan="2">Parliamentary Group</th><th>Comments</th></tr>
+        name_col: Name
+        attr_col:
+          origin_name: Parliamentary Group.1
+          name_on_plot: Kommata 2019
         ignore_cols:
           - Parliamentary Group
         enclosing_tag: tbody
@@ -15,4 +32,5 @@ source:
 target:
   config:
     target_path: ../plots
+    plot_name: Sankey_2007_2015_2019
   type: plotly

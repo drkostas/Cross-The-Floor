@@ -14,5 +14,5 @@ class AbstractVisualizer(ABC):
         self.__config__ = config
 
     @abstractmethod
-    def create_sankey_diagram(self):
+    def create_sankey_diagram(self, **kwargs):
         pass
