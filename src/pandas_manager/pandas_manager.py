@@ -104,7 +104,8 @@ class PandasManager:
 
     @staticmethod
     def __clean_df__(df: pd.DataFrame, name_col: str) -> pd.DataFrame:
-        df_obj = df.select_dtypes(['object'])
+        df_obj = df.select_dtypes(['object']).copy()
+        df_obj_columns = df_obj.columns
         # Delete the every character after a [ or ( in the name column
         match_txt_in_brackets = r"([\(\[].*)"
         df_obj.loc[:, name_col] = df_obj[name_col].str.replace(match_txt_in_brackets, "", regex=True)
@@ -112,9 +113,9 @@ class PandasManager:
         match_first_2_chars_and_last_word = r"^([a-zA-Z]{3})[a-zA-Z-]+\s+(?:[a-zA-Z-]+\s*\s+)*([a-zA-Z-]+)\s*$"
         df_obj.loc[:, name_col] = df_obj[name_col].str.replace(match_first_2_chars_and_last_word, r"\1 \2", regex=True)
         # Strip and capitalize all columns
-        df_obj[df_obj.columns] = df_obj.apply(lambda x: x.str.strip())
-        df_obj[df_obj.columns] = df_obj.apply(lambda x: x.str.capitalize())
-        df[df_obj.columns] = df_obj[df_obj.columns]
+        df_obj.loc[:, df_obj_columns] = df_obj.loc[:, df_obj_columns].apply(lambda x: x.str.strip())
+        df_obj.loc[:, df_obj_columns] = df_obj.loc[:, df_obj_columns].apply(lambda x: x.str.capitalize())
+        df.loc[:, df_obj_columns] = df_obj[df_obj_columns]
         return df
 
     @staticmethod
