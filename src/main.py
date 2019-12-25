@@ -87,8 +87,6 @@ def main():
     merged_df, plot_cols, name_col = pandas_manager.df_from_generator()
     nodes_df = pandas_manager.create_nodes_df(merged_df, plot_cols)
     edges_df = pandas_manager.create_edges_df(merged_df, plot_cols, name_col)
-    print(nodes_df)
-    print(edges_df)
     # Plot the Sankey Diagram
     visualizer.plot(nodes_df=nodes_df,
                     edges_df=edges_df,
