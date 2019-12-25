@@ -5,13 +5,6 @@ from logging import StreamHandler
 import argparse
 import traceback
 from typing import *
-import pandas as pd
-import numpy as np
-import re
-
-pd.set_option('display.max_columns', None)
-pd.set_option('display.max_rows', 20)
-pd.set_option('display.width', 1000)
 
 from configuration.configuration import Configuration
 from crawler.crawler import AbstractCrawler
@@ -21,6 +14,27 @@ from visualizer.plotly_visualizer import PlotlyVisualizer
 from pandas_manager.pandas_manager import PandasManager
 
 logger = logging.getLogger('MAIN')
+
+
+def __get_args__() -> argparse.Namespace:
+    import argparse
+
+    parser = argparse.ArgumentParser(description='Create a Sankey Diagram by providing a configuration file',
+                                     add_help=False)
+    required_arguments = parser.add_argument_group('Required Arguments')
+    config_file_params = {
+        'type': argparse.FileType('r'),
+        'required': True,
+        'help': "The configuration file"
+    }
+    required_arguments.add_argument('-c', '--config-file', **config_file_params)
+    required_arguments.add_argument('-l', '--log-file', help="Location to store log file")
+
+    optional = parser.add_argument_group('Optional Arguments')
+    optional.add_argument("-h", "--help", action="help", help="show this help message and exit")
+    optional.add_argument('-d', '--debug', action='store_true', help='enables the debug log messages')
+    optional.add_argument('-p', '--plot-name', help="The name of the Sankey Diagram plot")
+    return parser.parse_args()
 
 
 def __setup_log__(log_path: str, debug=False) -> None:
@@ -46,27 +60,6 @@ def __setup_log__(log_path: str, debug=False) -> None:
     logger.addHandler(stream_handler)
 
 
-def __bootstrap__() -> argparse.Namespace:
-    import argparse
-
-    parser = argparse.ArgumentParser(description='Create a Sankey Diagram by providing a configuration file',
-                                     add_help=False)
-    required_arguments = parser.add_argument_group('Required Arguments')
-    config_file_params = {
-        'type': argparse.FileType('r'),
-        'required': True,
-        'help': "The configuration file"
-    }
-    required_arguments.add_argument('-c', '--config-file', **config_file_params)
-    required_arguments.add_argument('-l', '--log-file', help="Location to store log file")
-
-    optional = parser.add_argument_group('Optional Arguments')
-    optional.add_argument("-h", "--help", action="help", help="show this help message and exit")
-    optional.add_argument('-d', '--debug', action='store_true', help='enables the debug log messages')
-    optional.add_argument('-p', '--plot-name', help="The name of the Sankey Diagram plot")
-    return parser.parse_args()
-
-
 def __setup_classes__(args: argparse.Namespace) -> Tuple[AbstractCrawler, AbstractVisualizer, str]:
     config = Configuration(args.config_file)
     if config.get_source_type() == 'ParliamentMembersCrawler':
@@ -82,24 +75,25 @@ def __setup_classes__(args: argparse.Namespace) -> Tuple[AbstractCrawler, Abstra
 
 
 def main():
-    args = __bootstrap__()
+    # Setup
+    args = __get_args__()
     log_fn = args.log_file
     __setup_log__(log_fn, args.debug)
     crawler, visualizer, plot_name = __setup_classes__(args)
-
+    # Crawl wikipedia and retrieve the requested tables
     df_generator = crawler.get_tables()
+    # Merge the retrieved tables and a create nodes, edges DataFrames
     pandas_manager = PandasManager(df_generator=df_generator)
     merged_df, plot_cols, name_col = pandas_manager.df_from_generator()
     nodes_df = pandas_manager.create_nodes_df(merged_df, plot_cols)
     edges_df = pandas_manager.create_edges_df(merged_df, plot_cols, name_col)
-
     print(nodes_df)
     print(edges_df)
-
-    # visualizer.create_sankey_diagram(data_df=merged_df,
-    #                                  attribute_cols=plot_cols,
-    #                                  name_col=name_col,
-    #                                  plot_name=plot_name)
+    # Plot the Sankey Diagram
+    visualizer.plot(nodes_df=nodes_df,
+                    edges_df=edges_df,
+                    attribute_cols=plot_cols,
+                    name_col=name_col)
 
 
 if __name__ == '__main__':

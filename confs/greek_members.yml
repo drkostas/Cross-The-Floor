@@ -32,5 +32,5 @@ source:
 target:
   config:
     target_path: ../plots
-    plot_name: Sankey_2007_2015_2019
+    plot_name: Greek_Elections_2007_2015_2019
   type: plotly
