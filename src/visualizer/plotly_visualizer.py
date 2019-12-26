@@ -34,7 +34,7 @@ class PlotlyVisualizer(AbstractVisualizer):
         y_positions: List = [0 for _ in range(len(nodes_list))]
         if grouping == 'year':
             node_color_list = [0 for _ in range(len(nodes_list))]
-        elif grouping == 'none':
+        elif grouping in ('party', 'none'):
             node_color_list = color_palette
         else:
             raise Exception("Color grouping %s not supported" % grouping)
@@ -69,7 +69,7 @@ class PlotlyVisualizer(AbstractVisualizer):
             edge_types = dict(zip(sorted(edge_years), color_palette))
             logger.debug("Edge types: %s" % str(edge_types))
             edge_color_list = [edge_types[node.split('_')[-1]] for node in source_from_edges_list]
-        elif grouping == 'none':
+        elif grouping in ('party', 'none'):
             edge_color_list = [color_palette[nodes_list.index(node)] for node in source_from_edges_list]
         else:
             raise Exception("Color grouping %s not supported" % grouping)
@@ -84,12 +84,23 @@ class PlotlyVisualizer(AbstractVisualizer):
                                    title: str = 'Sankey Diagram') -> Dict:
         # Get a List with the Nodes and one with the counts
         nodes_list = nodes_df['Node'].tolist()
+        logger.debug("nodes_list:")
+        logger.debug(nodes_list)
         nodes_count_list = nodes_df['Count'].tolist()
+        logger.debug("nodes_count_list:")
+        logger.debug(nodes_count_list)
         # Create a color palette
         if color_grouping == 'year':
             logger.debug("Year Color Grouping is enabled.")
             num_node_types = len(set([node.split('_')[-1] for node in nodes_list]))
             color_palette = list(sns.color_palette(None, num_node_types).as_hex())
+        elif color_grouping == 'party':
+            logger.debug("Party Color Grouping is enabled.")
+            color_palette = list(sns.color_palette(None, len(nodes_list)).as_hex())
+            for ind, node in enumerate(nodes_list):
+                node = node.split('_')[0]
+                if node in custom_party_colors:
+                    color_palette[ind] = custom_party_colors[node]
         elif color_grouping == 'none':
             logger.debug("Color Grouping is disabled.")
             color_palette = list(sns.color_palette(None, len(nodes_list)).as_hex())

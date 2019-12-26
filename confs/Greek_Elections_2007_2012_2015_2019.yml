@@ -44,7 +44,7 @@ target:
     target_path: ../plots
     save_image: false
     save_html: true
-    color_grouping_type: none # party|year|none
+    color_grouping_type: party # party|year|none
     custom_party_colors: # color_grouping_type should be party
       Syriza: "#DA3A42"
       New democracy: "#1A5CC6"

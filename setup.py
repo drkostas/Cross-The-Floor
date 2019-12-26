@@ -4,7 +4,7 @@ with open('requirements.txt') as f:
     requirements = f.read().splitlines()
 setup(
     name='parliament_members_sankey',
-    version='0.1',
+    version='0.2',
     py_modules=['main'],
     # packages=['crawler', 'visualizer', 'configuration', 'pandas_manager'],
     packages=find_packages('src'),
