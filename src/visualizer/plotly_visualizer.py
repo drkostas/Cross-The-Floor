@@ -198,7 +198,3 @@ class PlotlyVisualizer(AbstractVisualizer):
             logger.info("Saving image as `%s`" % image_filepath)
             fig = go.Figure(fig_dict)
             fig.write_image(image_filepath)
-
-        # import chart_studio.plotly as py
-        # py.sign_in('drkostas', 'nMT8XHbUvMWFXOR9LZ7s')
-        # py.iplot(fig_dict['data'], filename=self.__config__['plot_name'])

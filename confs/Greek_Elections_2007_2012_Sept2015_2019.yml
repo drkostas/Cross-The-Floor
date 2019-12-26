@@ -1,0 +1,63 @@
+source:
+  config:
+    sources:
+      - link: https://en.wikipedia.org/wiki/List_of_members_of_the_Hellenic_Parliament,_2007%E2%80%9309
+        table_header: <tr><th>Full Name</th><th>Constituency</th><th>Parliamentary Group</th></tr>
+        name_col: Full Name
+        attr_col:
+          origin_name: Parliamentary Group
+          name_on_plot: Kommata 2007
+          #        ignore_cols:
+          #          - Parliamentary Group
+        enclosing_tag: tbody
+      - link: https://en.wikipedia.org/wiki/List_of_members_of_the_Hellenic_Parliament,_May_2012
+        table_header: <tr><th></th><th>Full Name</th><th>Constituency</th><th>Parliamentary Group</th></tr>
+        name_col: Full Name
+        attr_col:
+          origin_name: Parliamentary Group
+          name_on_plot: Kommata 2012
+        #        ignore_cols:
+        #          - Parliamentary Group
+        enclosing_tag: tbody
+      - link: https://en.wikipedia.org/wiki/List_of_members_of_the_Hellenic_Parliament,_2015_(September)%E2%80%932019
+        table_header: <tr><th>Name</th><th>Constituency</th><th colspan="2">Parliamentary Group</th><th>Comments</th></tr>
+        name_col: Name
+        attr_col:
+          origin_name: Parliamentary Group.1
+          name_on_plot: Kommata 2015
+        ignore_cols:
+          - Parliamentary Group
+        enclosing_tag: tbody
+      - link: https://en.wikipedia.org/wiki/List_of_members_of_the_Hellenic_Parliament,_2019
+        table_header: <tr><th>Name</th><th>Constituency</th><th colspan="2">Parliamentary Group</th><th>Comments</th></tr>
+        name_col: Name
+        attr_col:
+          origin_name: Parliamentary Group.1
+          name_on_plot: Kommata 2019
+        ignore_cols:
+          - Parliamentary Group
+        enclosing_tag: tbody
+  type: ParliamentMembersCrawler
+target:
+  config:
+    plot_name: Greek Elections 2007-2012-Sept 2015-2019
+    target_path: ../plots
+    save_image: true
+    save_html: true
+    color_grouping_type: party # party|year|none
+    custom_party_colors: # color_grouping_type should be party
+      Syriza: "#DA3A42"
+      New democracy: "#1A5CC6"
+      Pasok: "#2B7536"
+      Pasok-democratic alignment: "#2B7536"
+      Movement for change: "#2B7536"
+      Kke: "#E33D46"
+      Communist party of greece: "#E33D46"
+      Independent greeks: "#164396"
+      Laos: "#21A5DE"
+      Golden dawn: "#4974BB"
+      Democratic left: "#D2373F"
+      Greek solution: "#8ABFBC"
+      The river: "#3A5FA6"
+      Mera25: "#EF414A"
+  type: plotly
