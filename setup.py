@@ -1,7 +1,10 @@
 from setuptools import setup, find_packages
 
+with open('LICENSE') as f:
+    licence = f.read()
 with open('requirements.txt') as f:
     requirements = f.read().splitlines()
+
 setup(
     name='parliament_members_sankey',
     version='0.3',
@@ -9,8 +12,8 @@ setup(
     # packages=['crawler', 'visualizer', 'configuration', 'pandas_manager'],
     packages=find_packages('src'),
     package_dir={'': 'src'},
-    url='https://github.com/drkostas',
-    license='',
+    url='https://github.com/drkostas/Parliament-Members-Flow-Viz',
+    license=licence,
     author='drkostas',
     author_email='georgiou.kostas94@gmail.com',
     description='Package for creating sankey diagrams for political',

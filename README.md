@@ -1,6 +1,6 @@
 # Parliament Members Flow Viz
 
-A software that given a yml file, it crawls wikipedia and creates a Sankey Diagram that shows the flow of parliament members from election to election.
+A software that given a yml file, it crawls wikipedia tables and creates a Sankey Diagram that shows the flow of parliament members from election to election.
 
 ## Getting Started
 
@@ -8,7 +8,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-1. Python 3 or higher
+1. Python 3
 1. [Plotly Orca](https://github.com/plotly/orca)
 
 ### Installing
