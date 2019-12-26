@@ -33,7 +33,6 @@ def __get_args__() -> argparse.Namespace:
     optional = parser.add_argument_group('Optional Arguments')
     optional.add_argument("-h", "--help", action="help", help="show this help message and exit")
     optional.add_argument('-d', '--debug', action='store_true', help='enables the debug log messages')
-    optional.add_argument('-p', '--plot-name', help="The name of the Sankey Diagram plot")
     return parser.parse_args()
 
 
