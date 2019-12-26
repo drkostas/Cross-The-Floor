@@ -102,6 +102,10 @@ parliament_members_sankey -c CONFIG_FILE [-l LOG_FILE] [--debug] [--help]
 python3 main.py -c CONFIG_FILE [-l LOG_FILE] [--debug] [--help]
 ```
 
+#### Results
+![Greek Elections 2012-Sept 2015-2019](https://github.com/drkostas/Parliament-Members-Flow-Viz/blob/master/plots/Greek%20Elections%202012-Sept%202015-2019.png)
+![Greek Elections 2007-2012-Febt 2015-2019](https://github.com/drkostas/Parliament-Members-Flow-Viz/blob/master/plots/Greek%20Elections%202007-2012-Feb%202015-2019.png)
+
 ## License
 
 This project is licensed under the GNU General Public License v3.0 License
