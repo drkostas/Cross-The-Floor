@@ -13,30 +13,31 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Installing
 
-Installing Plotly Orca
+##### Installing Plotly Orca
 - Method 1: `$ conda install -c plotly plotly-orca`
 - Method 1: `$ npm install -g electron@1.8.4 orca`
 - Method 1: `$ docker pull quay.io/plotly/orca`
 
-Create python virtual environment and source it
+##### Create python virtual environment and source it
 ```
 python3 -m venv myenv
 source venv/bin/activate
 ```
 
-Installing the requirements
+##### Installing the requirements
 ```
 pip install -r requirements.txt
 ```
 
-Run setup.py
+##### Run setup.py
 ```
 python setup.up install --force
 ```
 
 ### Running
 
-Create a yml configuration file with the following structure
+##### Create a yml configuration file with the following structure
+
 ```
 source:
   config:
@@ -74,7 +75,8 @@ target:
   type: plotly
 ```
 
-Some info about the yml
+##### Some info about the yml
+
 1. `[wikipedia link]`: Wikipeda page that contains a table with the list of parliament members of some year [[example](https://en.wikipedia.org/wiki/List_of_members_of_the_Hellenic_Parliament,_2015_(September)%E2%80%932019)
 1. `[html table header]`: The Table Header
    1. First click `View Page Source` on the wikipedia page
@@ -90,11 +92,12 @@ Some info about the yml
 1. `[Parliamentary group value]`: The name of the parliament group for which you want a custom color
 1. `[color hex code]`: The hex code of the custom color - should be enclosed in double quotes e.g. "#4974BB"
 
-Run it
+##### Run it
+
 ```
 parliament_members_sankey -c CONFIG_FILE [-l LOG_FILE] [--debug] [--help]
 ```
-or
+##### or
 ```
 python3 main.py -c CONFIG_FILE [-l LOG_FILE] [--debug] [--help]
 ```
