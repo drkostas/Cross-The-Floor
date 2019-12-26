@@ -2,6 +2,7 @@ from typing import *
 import logging
 import pandas as pd
 import plotly
+import plotly.graph_objects as go
 import seaborn as sns
 
 from .visualizer import AbstractVisualizer
@@ -134,18 +135,25 @@ class PlotlyVisualizer(AbstractVisualizer):
             )
         )
 
-        fig = dict(data=[data], layout=layout)
-        return fig
+        fig_dict = dict(data=[data], layout=layout)
+        return fig_dict
 
     def plot(self, nodes_df: pd.DataFrame, edges_df: pd.DataFrame, attribute_cols: List, name_col: str):
         logger.debug('Plotly config:')
         logger.debug(self.__config__)
         # Generate Sankey Figure
-        fig = self.__generate_sankey_figure__(nodes_df=nodes_df, edges_df=edges_df,
-                                              color_grouping=self.__config__['color_grouping'],
-                                              title=self.__config__['plot_name'])
+        fig_dict = self.__generate_sankey_figure__(nodes_df=nodes_df, edges_df=edges_df,
+                                                   color_grouping=self.__config__['color_grouping'],
+                                                   title=self.__config__['plot_name'])
         # self.logger.debug(fig)
         # Plot it
-        filename = "{}/{}.html".format(self.__config__['target_path'], self.__config__['plot_name'])
-        logger.info("Plotting and save on `%s`" % filename)
-        plotly.offline.plot(fig, validate=True, filename=filename)
+        logger.info("Plotting..")
+        if self.__config__['save_html']:
+            html_filepath = "{}/{}.html".format(self.__config__['target_path'], self.__config__['plot_name'])
+            logger.info("Saving html as `%s`" % html_filepath)
+            plotly.offline.plot(fig_dict, validate=True, filename=html_filepath)
+        if self.__config__['save_image']:
+            image_filepath = "{}/{}.png".format(self.__config__['target_path'], self.__config__['plot_name'])
+            logger.info("Saving image as `%s`" % image_filepath)
+            fig = go.Figure(fig_dict)
+            fig.write_image(image_filepath)

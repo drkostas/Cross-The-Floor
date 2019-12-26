@@ -10,6 +10,15 @@ source:
 #        ignore_cols:
 #          - Parliamentary Group
         enclosing_tag: tbody
+      - link: https://en.wikipedia.org/wiki/List_of_members_of_the_Hellenic_Parliament,_May_2012
+        table_header: <tr><th></th><th>Full Name</th><th>Constituency</th><th>Parliamentary Group</th></tr>
+        name_col: Full Name
+        attr_col:
+          origin_name: Parliamentary Group
+          name_on_plot: Kommata 2012
+        #        ignore_cols:
+        #          - Parliamentary Group
+        enclosing_tag: tbody
       - link: https://en.wikipedia.org/wiki/List_of_members_of_the_Hellenic_Parliament,_2015_(February%E2%80%93August)
         table_header: <tr><th>Name</th><th>Constituency</th><th colspan="2">Parliamentary Group</th><th>Comments</th></tr>
         name_col: Name
@@ -32,6 +41,8 @@ source:
 target:
   config:
     target_path: ../plots
-    plot_name: Greek_Elections_2007_2015_2019
+    plot_name: Greek_Elections_2007_2012_2015_2019
     color_grouping: false
+    save_image: true
+    save_html: false
   type: plotly

@@ -25,16 +25,22 @@ class Configuration:
         else:
             raise TypeError('Config file must be TextIOWrapper or path to a file')
 
-        if str.lower(config['target']['config']['color_grouping']) in ('y', 'yes', 'true'):
-            config['target']['config']['color_grouping'] = True
-        else:
-            config['target']['config']['color_grouping'] = False
-
         self.config = config
-        self.target = config['target']
         self.source = config['source']
+        self.target = config['target']
 
-
+        if str.lower(self.target['config']['color_grouping']) in ('y', 'yes', 'true'):
+            self.target['config']['color_grouping'] = True
+        else:
+            self.target['config']['color_grouping'] = False
+        if str.lower(self.target['config']['save_image']) in ('y', 'yes', 'true'):
+            self.target['config']['save_image'] = True
+        else:
+            self.target['config']['save_image'] = False
+        if str.lower(self.target['config']['save_html']) in ('y', 'yes', 'true'):
+            self.target['config']['save_html'] = True
+        else:
+            self.target['config']['save_html'] = False
 
     def __getitem__(self, item):
         return self.__getattribute__(item)
