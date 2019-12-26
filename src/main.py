@@ -13,7 +13,7 @@ from crawler.parliament_members_crawler import ParliamentMembersCrawler
 from visualizer.plotly_visualizer import PlotlyVisualizer
 from pandas_manager.pandas_manager import PandasManager
 
-logger = logging.getLogger('MAIN')
+logger = logging.getLogger('Main')
 
 
 def __get_args__() -> argparse.Namespace:
@@ -37,7 +37,7 @@ def __get_args__() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def __setup_log__(log_path: str, debug=False) -> None:
+def __setup_logger__(log_path: str, debug=False) -> None:
     from os import sep
     if log_path is None:
         raise Exception('No log path was provided!')
@@ -51,22 +51,22 @@ def __setup_log__(log_path: str, debug=False) -> None:
             pass
     log_filename = sep.join(log_path)
     time_rotating_handler = TimedRotatingFileHandler(log_filename, when='midnight', interval=1)
-    stream_handler = StreamHandler()
     logging.basicConfig(level=logging.INFO if debug is not True else logging.DEBUG,
                         format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
                         datefmt='%Y-%m-%d %H:%M:%S'
                         )
     logger.addHandler(time_rotating_handler)
-    logger.addHandler(stream_handler)
 
 
 def __setup_classes__(args: argparse.Namespace) -> Tuple[AbstractCrawler, AbstractVisualizer, str]:
     config = Configuration(args.config_file)
     if config.get_source_type() == 'ParliamentMembersCrawler':
+        logger.info("Using ParliamentMembers Crawler.")
         crawler = ParliamentMembersCrawler(config=config.get_source())
     else:
         raise Exception('Unknown source type!')
     if config.get_target_type() == 'plotly':
+        logger.info("Using Plotly Visualizer.")
         visualizer = PlotlyVisualizer(config=config.get_target())
     else:
         raise Exception('Unknown source type!')
@@ -78,7 +78,7 @@ def main():
     # Setup
     args = __get_args__()
     log_fn = args.log_file
-    __setup_log__(log_fn, args.debug)
+    __setup_logger__(log_fn, args.debug)
     crawler, visualizer, plot_name = __setup_classes__(args)
     # Crawl wikipedia and retrieve the requested tables
     df_generator = crawler.get_tables()

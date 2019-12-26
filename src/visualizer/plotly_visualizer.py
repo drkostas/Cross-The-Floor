@@ -6,9 +6,10 @@ import seaborn as sns
 
 from .visualizer import AbstractVisualizer
 
+logger = logging.getLogger('PlotlyVisualizer')
+
 
 class PlotlyVisualizer(AbstractVisualizer):
-    logger = logging.getLogger('PlotlyVisualizer')
 
     def __init__(self, config: dict) -> None:
         """
@@ -24,6 +25,7 @@ class PlotlyVisualizer(AbstractVisualizer):
         # For each node_type assign the equivalent node index
         for ind, node in enumerate(nodes_list):
             node_types[node.split('_')[-1]].append(ind)
+        logger.debug("Node types: %s" % str(node_types))
         # Init x, y coordinates and node colors lists
         x_positions: List = [0 for _ in range(len(nodes_list))]
         y_positions: List = [0 for _ in range(len(nodes_list))]
@@ -39,6 +41,12 @@ class PlotlyVisualizer(AbstractVisualizer):
                 node_color_list[node] = color_palette[ind_1]
                 y_position -= 1.0 / len(node_types[key])
             x_position += 1.0 / len(node_types.keys())
+        logger.debug("x_positions:")
+        logger.debug(x_positions)
+        logger.debug("y_positions:")
+        logger.debug(y_positions)
+        logger.debug("node_color_list:")
+        logger.debug(node_color_list)
 
         return x_positions, y_positions, node_color_list
 
@@ -46,8 +54,12 @@ class PlotlyVisualizer(AbstractVisualizer):
     def __generate_edge_colors__(edges_df: pd.DataFrame, nodes_list: List, color_palette: List) -> List:
         edge_years = set([node.split('_')[-1] for node in nodes_list])
         edge_types = dict(zip(sorted(edge_years), color_palette))
+        logger.debug("Edge types: %s" % str(edge_types))
         source_from_edges_list = edges_df['Source'].to_list()
         edge_color_list = [edge_types[node.split('_')[-1]] for node in source_from_edges_list]
+        logger.debug("edge_color_list:")
+        logger.debug(edge_color_list)
+
         return edge_color_list
 
     @classmethod
@@ -60,9 +72,10 @@ class PlotlyVisualizer(AbstractVisualizer):
         num_node_types = len(set([node.split('_')[-1] for node in nodes_list]))
         color_palette = list(sns.color_palette(None, num_node_types).as_hex())
         # Generate the nodes' positions and colors
-        x_positions, y_positions, node_color_list = cls.__generate_node_positions_and_colors__(nodes_list=nodes_list,
-                                                                                               nodes_count_list=nodes_count_list,
-                                                                                               color_palette=color_palette)
+        x_positions, y_positions, node_color_list = \
+            cls.__generate_node_positions_and_colors__(nodes_list=nodes_list,
+                                                       nodes_count_list=nodes_count_list,
+                                                       color_palette=color_palette)
         # Generate the edges' colors
         edge_color_list = cls.__generate_edge_colors__(edges_df=edges_df, nodes_list=nodes_list,
                                                        color_palette=color_palette)
@@ -111,7 +124,8 @@ class PlotlyVisualizer(AbstractVisualizer):
         # Generate Sankey Figure
         fig = self.__generate_sankey_figure__(nodes_df=nodes_df, edges_df=edges_df,
                                               title=self.__config__['plot_name'])
-        self.logger.debug(fig)
-        filename = "{}/{}.html".format(self.__config__['target_path'], self.__config__['plot_name'])
+        # self.logger.debug(fig)
         # Plot it
+        filename = "{}/{}.html".format(self.__config__['target_path'], self.__config__['plot_name'])
+        logger.info("Plotting and save on `%s`" % filename)
         plotly.offline.plot(fig, validate=True, filename=filename)

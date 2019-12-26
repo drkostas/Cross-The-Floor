@@ -1,18 +1,16 @@
 from typing import *
 import logging
-import re
 import pandas as pd
 import numpy as np
 
-import sys
+# pd.set_option('display.max_columns', 500)
+# pd.set_option('display.max_rows', 100)
+# pd.set_option('display.width', 1000)
 
-pd.set_option('display.max_columns', 500)
-pd.set_option('display.max_rows', 100)
-pd.set_option('display.width', 1000)
+logger = logging.getLogger('PandasManager')
 
 
 class PandasManager:
-    logger = logging.getLogger('PandasManager')
 
     def __init__(self, df_generator: Generator) -> None:
         """
@@ -37,6 +35,7 @@ class PandasManager:
         # Group by Node and fet Counts
         nodes_df['Count'] = nodes_df['Node'].map(nodes_df['Node'].value_counts())
         nodes_df.drop_duplicates(inplace=True)
+        logger.debug("nodes_df columns: %s" % nodes_df.columns)
 
         return nodes_df.reset_index().reindex(columns=['Node', 'Count'])
 
@@ -76,6 +75,7 @@ class PandasManager:
         edges_df = edges_df[~edges_df['Source'].str.startswith("nan")]
         # Keep only relevant columns
         edges_df = edges_df.groupby(['Source', 'Target']).size().reset_index(name="Count")
+        logger.debug("edges_df columns: %s" % edges_df.columns)
 
         return edges_df.reset_index().reindex(columns=['Source', 'Target', 'Count'])
 
@@ -100,6 +100,8 @@ class PandasManager:
             merged_df = pd.merge(merged_df, df, on=first_name_column, how='outer')
         # Drop rows with null names
         merged_df.dropna(subset=[first_name_column], inplace=True)
+        logger.debug("merged_df columns: %s" % merged_df.columns)
+
         return merged_df, plot_cols, first_name_column
 
     @staticmethod
