@@ -38,8 +38,16 @@ class ParliamentMembersCrawler(WikipediaCrawler):
         html = html.replace('\n', '', sys.maxsize)
         regex_str = "({table_header}.*?)</{enclosing_tag}>".format(table_header=source["table_header"],
                                                                    enclosing_tag=source["enclosing_tag"])
+        logger.debug("regex_str:")
+        logger.debug(regex_str)
         pattern = re.compile(regex_str)
-        return "<table>{}</table>".format(pattern.findall(html)[0])
+        logger.debug("pattern:")
+        logger.debug(pattern)
+        pattern_match = pattern.findall(html)
+        logger.debug("pattern_match:")
+        logger.debug(pattern_match)
+        table = "<table>{}</table>".format(pattern_match[0])
+        return table
 
     def get_table(self, source: dict) -> pd.DataFrame:
         table = self.__parse_html__(source)

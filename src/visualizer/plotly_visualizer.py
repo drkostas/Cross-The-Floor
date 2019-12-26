@@ -126,11 +126,22 @@ class PlotlyVisualizer(AbstractVisualizer):
             type='sankey',
             node=dict(
                 hoverinfo="all",
-                pad=15,
-                thickness=20,
+                pad=0,
+                thickness=15,
                 line=dict(
-                    color="black",
-                    width=0.5
+                    color="white",
+                    width=0.8
+                ),
+                hoverlabel=dict(
+                    font=dict(
+                        size=18,
+                        color="#FFFFFF",
+                        family="PT Sans Narrow"
+                        # "Arial", "Balto", "Courier New", "Droid Sans",
+                        # "Droid Serif", "Droid Sans Mono", "Gravitas One",
+                        # "Old Standard TT", "Open Sans", "Overpass",
+                        # "PT Sans Narrow", "Raleway", "Times New Roman"
+                    )
                 ),
                 label=nodes_list,
                 color=node_color_list,
@@ -150,9 +161,18 @@ class PlotlyVisualizer(AbstractVisualizer):
 
         layout = dict(
             title=title,
+            paper_bgcolor='#0B151A',
+            plot_bgcolor='#0B151A',
             font=dict(
-                size=10
-            )
+                size=18,
+                color="#FFFFFF",
+                family="PT Sans Narrow"
+                # "Arial", "Balto", "Courier New", "Droid Sans",
+                # "Droid Serif", "Droid Sans Mono", "Gravitas One",
+                # "Old Standard TT", "Open Sans", "Overpass",
+                # "PT Sans Narrow", "Raleway", "Times New Roman"
+            ),
+            margin=dict(t=100,b=50,l=0,r=0)
         )
 
         fig_dict = dict(data=[data], layout=layout)
@@ -178,3 +198,7 @@ class PlotlyVisualizer(AbstractVisualizer):
             logger.info("Saving image as `%s`" % image_filepath)
             fig = go.Figure(fig_dict)
             fig.write_image(image_filepath)
+
+        # import chart_studio.plotly as py
+        # py.sign_in('drkostas', 'nMT8XHbUvMWFXOR9LZ7s')
+        # py.iplot(fig_dict['data'], filename=self.__config__['plot_name'])
