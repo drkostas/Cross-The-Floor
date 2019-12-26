@@ -40,9 +40,9 @@ source:
   type: ParliamentMembersCrawler
 target:
   config:
-    target_path: ../plots
+    target_path: plots
     plot_name: Greek_Elections_2007_2012_2015_2019
     color_grouping: false
-    save_image: true
-    save_html: false
+    save_image: false
+    save_html: true
   type: plotly

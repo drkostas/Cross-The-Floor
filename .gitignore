@@ -1,3 +1,7 @@
 /venv/
 /.idea/
 /logs/*
+/dist/
+/build/
+/*/tmp.*
+/*/*egg-info
