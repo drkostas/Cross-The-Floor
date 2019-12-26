@@ -29,10 +29,6 @@ class Configuration:
         self.source = config['source']
         self.target = config['target']
 
-        if str.lower(self.target['config']['color_grouping']) in ('y', 'yes', 'true'):
-            self.target['config']['color_grouping'] = True
-        else:
-            self.target['config']['color_grouping'] = False
         if str.lower(self.target['config']['save_image']) in ('y', 'yes', 'true'):
             self.target['config']['save_image'] = True
         else:

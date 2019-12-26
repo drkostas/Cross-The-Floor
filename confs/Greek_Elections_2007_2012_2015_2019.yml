@@ -40,9 +40,24 @@ source:
   type: ParliamentMembersCrawler
 target:
   config:
-    target_path: plots
     plot_name: Greek_Elections_2007_2012_2015_2019
-    color_grouping: false
+    target_path: ../plots
     save_image: false
     save_html: true
+    color_grouping_type: none # party|year|none
+    custom_party_colors: # color_grouping_type should be party
+      Syriza: "#DA3A42"
+      New democracy: "#1A5CC6"
+      Pasok: "#2B7536"
+      Pasok-democratic alignment: "#2B7536"
+      Movement for change: "#2B7536"
+      Kke: "#E33D46"
+      Communist party of greece: "#E33D46"
+      Independent greeks: "#164396"
+      Laos: "#21A5DE"
+      Golden dawn: "#4974BB"
+      Democratic left: "#D2373F"
+      Greek solution: "#8ABFBC"
+      The river: "#3A5FA6"
+      Mera25: "#EF414A"
   type: plotly
