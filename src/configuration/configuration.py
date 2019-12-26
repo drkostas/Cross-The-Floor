@@ -24,11 +24,17 @@ class Configuration:
             self.input_path = config_file
         else:
             raise TypeError('Config file must be TextIOWrapper or path to a file')
-        self.config = config
 
+        if str.lower(config['target']['config']['color_grouping']) in ('y', 'yes', 'true'):
+            config['target']['config']['color_grouping'] = True
+        else:
+            config['target']['config']['color_grouping'] = False
+
+        self.config = config
+        self.target = config['target']
         self.source = config['source']
 
-        self.target = config['target']
+
 
     def __getitem__(self, item):
         return self.__getattribute__(item)

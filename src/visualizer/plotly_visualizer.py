@@ -18,8 +18,10 @@ class PlotlyVisualizer(AbstractVisualizer):
         super().__init__(config=config)
 
     @staticmethod
-    def __generate_node_positions_and_colors__(nodes_list: List, nodes_count_list: List,
-                                               color_palette: List) -> Tuple[List, List, List]:
+    def __generate_node_positions_and_colors__(nodes_list: List,
+                                               nodes_count_list: List,
+                                               color_palette: List,
+                                               grouping: bool = True) -> Tuple[List, List, List]:
         # Get the node types based on the year
         node_types: Dict = {node.split('_')[-1]: [] for node in nodes_list}
         # For each node_type assign the equivalent node index
@@ -29,7 +31,10 @@ class PlotlyVisualizer(AbstractVisualizer):
         # Init x, y coordinates and node colors lists
         x_positions: List = [0 for _ in range(len(nodes_list))]
         y_positions: List = [0 for _ in range(len(nodes_list))]
-        node_color_list = [0 for _ in range(len(nodes_list))]
+        if grouping:
+            node_color_list = [0 for _ in range(len(nodes_list))]
+        else:
+            node_color_list = color_palette
         # Fill the lists with values based on the node types
         x_position = 0.0
         for ind_1, key in enumerate(sorted(node_types.keys())):
@@ -38,7 +43,8 @@ class PlotlyVisualizer(AbstractVisualizer):
                                       reverse=False):
                 x_positions[node] = round(float(x_position), ndigits=3)
                 y_positions[node] = round(y_position, ndigits=3)
-                node_color_list[node] = color_palette[ind_1]
+                if grouping:
+                    node_color_list[node] = color_palette[ind_1]
                 y_position -= 1.0 / len(node_types[key])
             x_position += 1.0 / len(node_types.keys())
         logger.debug("x_positions:")
@@ -51,39 +57,50 @@ class PlotlyVisualizer(AbstractVisualizer):
         return x_positions, y_positions, node_color_list
 
     @staticmethod
-    def __generate_edge_colors__(edges_df: pd.DataFrame, nodes_list: List, color_palette: List) -> List:
-        edge_years = set([node.split('_')[-1] for node in nodes_list])
-        edge_types = dict(zip(sorted(edge_years), color_palette))
-        logger.debug("Edge types: %s" % str(edge_types))
-        source_from_edges_list = edges_df['Source'].to_list()
-        edge_color_list = [edge_types[node.split('_')[-1]] for node in source_from_edges_list]
+    def __generate_edge_colors__(edges_df: pd.DataFrame, nodes_list: List, color_palette: List,
+                                 grouping: bool = True) -> List:
+
+        source_from_edges_list = edges_df['Target'].to_list()
+        if grouping:
+            edge_years = set([node.split('_')[-1] for node in nodes_list])
+            edge_types = dict(zip(sorted(edge_years), color_palette))
+            logger.debug("Edge types: %s" % str(edge_types))
+            edge_color_list = [edge_types[node.split('_')[-1]] for node in source_from_edges_list]
+        else:
+            edge_color_list = [color_palette[nodes_list.index(node)] for node in source_from_edges_list]
+
         logger.debug("edge_color_list:")
         logger.debug(edge_color_list)
-
         return edge_color_list
 
     @classmethod
     def __generate_sankey_figure__(cls, nodes_df: pd.DataFrame, edges_df: pd.DataFrame,
-                                   title: str = 'Sankey Diagram'):
+                                   color_grouping: bool = True, title: str = 'Sankey Diagram') -> Dict:
         # Get a List with the Nodes and one with the counts
         nodes_list = nodes_df['Node'].tolist()
         nodes_count_list = nodes_df['Count'].tolist()
         # Create a color palette
-        num_node_types = len(set([node.split('_')[-1] for node in nodes_list]))
-        color_palette = list(sns.color_palette(None, num_node_types).as_hex())
+        if color_grouping:
+            logger.debug("Color Grouping is enabled.")
+            num_node_types = len(set([node.split('_')[-1] for node in nodes_list]))
+            color_palette = list(sns.color_palette(None, num_node_types).as_hex())
+        else:
+            logger.debug("Color Grouping is disabled.")
+            color_palette = list(sns.color_palette(None, len(nodes_list)).as_hex())
         # Generate the nodes' positions and colors
         x_positions, y_positions, node_color_list = \
             cls.__generate_node_positions_and_colors__(nodes_list=nodes_list,
                                                        nodes_count_list=nodes_count_list,
-                                                       color_palette=color_palette)
+                                                       color_palette=color_palette,
+                                                       grouping=color_grouping)
         # Generate the edges' colors
         edge_color_list = cls.__generate_edge_colors__(edges_df=edges_df, nodes_list=nodes_list,
-                                                       color_palette=color_palette)
+                                                       color_palette=color_palette, grouping=color_grouping)
         # The source and the target of each edge should be the corresponding index of the node
         edges_df['SourceID'] = edges_df['Source'].apply(lambda x: nodes_list.index(x))
         edges_df['TargetID'] = edges_df['Target'].apply(lambda x: nodes_list.index(x))
 
-        # creating the sankey diagram
+        # Construct the sankey diagram's figure
         data = dict(
             type='sankey',
             node=dict(
@@ -121,8 +138,11 @@ class PlotlyVisualizer(AbstractVisualizer):
         return fig
 
     def plot(self, nodes_df: pd.DataFrame, edges_df: pd.DataFrame, attribute_cols: List, name_col: str):
+        logger.debug('Plotly config:')
+        logger.debug(self.__config__)
         # Generate Sankey Figure
         fig = self.__generate_sankey_figure__(nodes_df=nodes_df, edges_df=edges_df,
+                                              color_grouping=self.__config__['color_grouping'],
                                               title=self.__config__['plot_name'])
         # self.logger.debug(fig)
         # Plot it
