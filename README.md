@@ -20,7 +20,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ##### Create python virtual environment and source it
 ```
-python3 -m venv myenv
+python3 -m venv venv
 source venv/bin/activate
 ```
 
@@ -103,7 +103,6 @@ python3 main.py -c CONFIG_FILE [-l LOG_FILE] [--debug] [--help]
 ```
 
 #### Results
-![Greek Elections 2012-Sept 2015-2019](https://github.com/drkostas/Parliament-Members-Flow-Viz/blob/master/plots/Greek%20Elections%202012-Sept%202015-2019.png)
 ![Greek Elections 2007-2012-Sept 2015-2019](https://github.com/drkostas/Parliament-Members-Flow-Viz/blob/master/plots/Greek%20Elections%202007-2012-Sept%202015-2019.png)
 
 ## License

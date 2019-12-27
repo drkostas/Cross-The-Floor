@@ -24,7 +24,7 @@ source:
         name_col: Name
         attr_col:
           origin_name: Parliamentary Group.1
-          name_on_plot: Kommata Sept 2015
+          name_on_plot: Kommata 2015
         ignore_cols:
           - Parliamentary Group
         enclosing_tag: tbody
