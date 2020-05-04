@@ -1,6 +1,7 @@
-# Parliament Members Flow Viz
+# Cross The Floor Viz
 
-A software that given a yml file, it crawls wikipedia tables and creates a Sankey Diagram that shows the flow of parliament members from election to election.
+Uses Sankey Diagrams to visualize politicians that have "crossed the floor" from election to election.
+
 
 ## Getting Started
 
