@@ -57,7 +57,7 @@ scipy==1.4.1
 seaborn==0.9.0
 Send2Trash==1.5.0
 six==1.13.0
-soupsieve==1.9.5
+soupsieve==2.9
 terminado==0.8.3
 testpath==0.4.4
 tornado==6.0.3
